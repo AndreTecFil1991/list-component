@@ -1,11 +1,51 @@
 import React, { Component } from 'react'
-import Item from './Item.js'
 import products from '../js/MockData.js'
+import Item from './Item'
 
 class ListComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.handleProductVote = this.handleProductVote.bind(this);
+        this.changeSort = this.changeSort.bind(this);
+        this.state = {
+            products: [],
+            sort: 'asc'
+        };
+    }
+
+    changeSort(type) {
+        this.setState({ sort: type })
+    }
+
+    componentDidMount() {
+        this.setState({
+            products: products
+        });
+    }
+
+    handleProductVote(productID, type) {
+        console.log("Voted Product: " + productID);
+        let products = this.state.products;
+        products.find(product => {
+            if (product.id === productID) {
+                if (type === "up")
+                    Object.assign({}, product, { votes: product.votes++ });
+                else Object.assign({}, product, { votes: product.votes-- });
+            }
+        });
+
+        this.setState({
+            products
+        });
+    }
+
+
     render() {
-        const sortedProducts = products.sort((a, b) => (b.votes - a.votes));
-        let productComponents = sortedProducts.map(product => (
+        const sort = this.state.sort
+        const products = this.state.products.sort((a, b) => {
+            sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
+        })
+        let productComponents = products.map(product => (
             <Item
                 id={product.id}
                 key={"productid-" + product.id}
@@ -15,9 +55,24 @@ class ListComponent extends Component {
                 votes={product.votes}
                 submitterAvatarUrl={product.submitterAvatarUrl}
                 productImageUrl={product.productImageUrl}
+                onVote={this.handleProductVote}
             />
-        ));
-        return <div className="ui unstackable items">{productComponents}</div>;
+        ))
+        return (
+            <div>
+                <a onClick={() => {
+                    this.changeSort('asc');
+                }}>
+                    <i className="large caret up icon" /> Sort Asc
+        </a>
+                <a onClick={() => {
+                    this.changeSort('desc');
+                }}>
+                    <i className="large caret down icon" /> Sort Desc
+        </a>
+                <div className="ui unstackable items">{productComponents}</div>
+            </div>
+        )
     }
 }
 
