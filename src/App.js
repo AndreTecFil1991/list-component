@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import './App.css'
-import ListComponent from './listcomponent/ListComponent.js'
 import './semantic-dist/semantic.css'
+import ListComponent from './listcomponent/ListComponent.js'
+import VotesContainer from './votingcomponent/VotesContainer'
 
 class App extends Component {
   render() {
     return (
-      <ListComponent />
+      <div>
+        <ListComponent />
+        <VotesContainer />
+      </div>
     );
   }
 }
