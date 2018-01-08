@@ -43,7 +43,7 @@ class ListComponent extends Component {
     render() {
         const sort = this.state.sort
         const products = this.state.products.sort((a, b) => {
-            sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
+            return sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
         })
         let productComponents = products.map(product => (
             <Item
@@ -60,16 +60,12 @@ class ListComponent extends Component {
         ))
         return (
             <div>
-                <a onClick={() => {
-                    this.changeSort('asc');
-                }}>
+                <a onClick={() => { this.changeSort('asc'); }}>
                     <i className="large caret up icon" /> Sort Asc
-        </a>
-                <a onClick={() => {
-                    this.changeSort('desc');
-                }}>
+                </a>
+                <a onClick={() => { this.changeSort('desc'); }}>
                     <i className="large caret down icon" /> Sort Desc
-        </a>
+                </a>
                 <div className="ui unstackable items">{productComponents}</div>
             </div>
         )
