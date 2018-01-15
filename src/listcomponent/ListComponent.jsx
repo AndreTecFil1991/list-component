@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import products from '../js/MockData.js'
 import Item from './Item'
 
 class ListComponent extends Component {
@@ -19,7 +18,7 @@ class ListComponent extends Component {
 
     componentDidMount() {
         this.setState({
-            products: products
+            products: this.props.products
         });
     }
 
@@ -30,7 +29,8 @@ class ListComponent extends Component {
             if (product.id === productID) {
                 if (type === "up")
                     Object.assign({}, product, { votes: product.votes++ });
-                else Object.assign({}, product, { votes: product.votes-- });
+                else
+                    Object.assign({}, product, { votes: product.votes-- });
             }
         });
 
