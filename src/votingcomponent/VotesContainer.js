@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react'
+import styled from 'react-emotion'
 import Votes from './Votes'
 import { createStore } from 'redux'
 
@@ -43,10 +44,23 @@ class VotesContainer extends Component {
     render() {
         const votes = store.getState().votes;
 
+        const Container = styled('div') `
+            margin-bottom: 30px;
+        `
+
+        const Box = styled('div') `
+            border: solid 1px black;
+            border-radius: 4px;
+            min-height: 100px;
+        `
+
         return (
-            <div className='ui segment' style={{ border: 'solid 1px black', borderRadius: '4px' }}>
-                <Votes votes={votes} />
-            </div>
+            <Container>
+                <h3>{this.props.title}</h3>
+                <Box>
+                    <Votes votes={votes} />
+                </Box>
+            </Container>
         )
     }
 }
