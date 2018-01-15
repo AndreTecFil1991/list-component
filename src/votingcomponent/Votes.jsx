@@ -1,32 +1,31 @@
-import React, { Component } from 'react';
-import { store } from './VotesContainer';
+import React, { Component } from 'react'
+import styled from 'react-emotion'
 
 
 export default class Votes extends Component {
-
-    handleClick = (index) => {
-        store.dispatch({
-            type: 'DELETE_VOTE',
-            index: index
-        });
-    }
-
     render() {
+        const Container = styled('div')`
+            margin: 10px;
+        `
+
+        const Vote = styled('div')`
+            margin: 5px 0px;
+        `
 
         const votes = this.props.votes.map((vote, index) => (
-            <div className='comment'
+            <Vote
                 key={index}
                 onClick={() =>
                     this.handleClick(index)
                 }>
                 {vote}
-            </div>
+            </Vote>
         ))
 
         return (
-            <div className='ui comments'>
+            <Container>
                 {votes}
-            </div>
+            </Container>
         );
     }
 }

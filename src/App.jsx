@@ -1,10 +1,43 @@
 import React, { Component } from 'react'
 import styled from 'react-emotion'
+import { createStore } from 'redux'
 import './semantic-dist/semantic.css'
 
 import products from './js/MockData.js'
 import ListComponent from './listcomponent/ListComponent'
 import VotingComponent from './votingcomponent/VotingComponent'
+
+/*handleSubmit = () => {
+  store.dispatch({
+      type: 'ADD_MESSAGE',
+      message: this.state.value
+  })
+}*/
+
+function reducer(state, action) {
+    if (action.type === 'ADD_MESSAGE') {
+        return {
+            votes: state.votes.concat(action.message)
+        }
+    } else if (action.type === 'DELETE_VOTE') {
+        return {
+            votes: [
+                ...state.votes.slice(0, action.index),
+                ...state.votes.slice(action.index + 1, state.votes.length)
+            ]
+        }
+    } else {
+        return state;
+    }
+}
+
+const initialState = { votes: [] };
+export const store = createStore(reducer, initialState);
+
+const listener = () => {
+    console.log('Current state: ', store.getState().votes);
+}
+store.subscribe(listener);
 
 class App extends Component {
   constructor(props) {
@@ -12,16 +45,24 @@ class App extends Component {
     this.handleProductVote = this.handleProductVote.bind(this);
     this.changeSort = this.changeSort.bind(this);
     this.state = {
-      products: [],
-      sort: 'asc'
+      products: products,
+      sort: 'asc',
+      lastVoted: {
+        upvoted: ['Xpto1', 'Xpto2'],
+        downvoted: ['TEST']
+      }
     };
   }
 
   componentDidMount() {
-    this.setState({
-      products: this.props.products
-    });
+    /*this.setState({
+      products: products
+    });*/
+
+    store.subscribe(() => this.forceUpdate());
   }
+
+
 
   //################################################################################################################################################################
   //########## functions for ListComponent ########################################################################################################################
@@ -50,6 +91,16 @@ class App extends Component {
   //########## end of functions for ListComponent #################################################################################################################
   //################################################################################################################################################################
 
+  //################################################################################################################################################################
+  //########## functions for VotingComponent ######################################################################################################################
+  //##############################################################################################################################################################
+
+
+  
+  //##############################################################################################################################################################
+  //########## end of functions for VotingComponent ###############################################################################################################
+  //################################################################################################################################################################
+
   render() {
     //CSS with emotion
     const LeftContainer = styled('div') `
@@ -58,17 +109,24 @@ class App extends Component {
     `
 
     const RightContainer = styled('div') `
-      width: 35%;
+      width: 30%;
     `
 
     const Container = styled('div') `
       margin: 30px;
+      width: 100%;
+      display: flex;
     `
 
     //titles for VotingComponent continers
-    const votingTitles = [
-      'Last upvoted',
-      'Last downvoted'
+    const votingComponentConfig = [
+      {
+        title: 'Last upvoted',
+        votes: this.state.lastVoted.upvoted
+      }, {
+        title: 'Last downvoted',
+        votes: this.state.lastVoted.downvoted
+      }
     ]
 
     return (
@@ -82,7 +140,9 @@ class App extends Component {
           />
         </LeftContainer>
         <RightContainer>
-          <VotingComponent titles={votingTitles} />
+          <VotingComponent 
+            config={votingComponentConfig}
+          />
         </RightContainer>
       </Container>
     );

@@ -11,10 +11,10 @@ export default class VotingComponent extends Component {
             top: 100px;
             right: 30px;
         `
-        const titles = this.props.titles
+        const configs = this.props.config
 
-        let votesContainers = titles.map(title => (
-            <VotesContainer key={title} title={title} />
+        let votesContainers = configs.map(config => (
+            <VotesContainer key={config.title+config.votes.length} title={config.title} votes={config.votes} />
         ))
 
         return (
