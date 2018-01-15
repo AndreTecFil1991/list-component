@@ -9,16 +9,46 @@ import VotingComponent from './votingcomponent/VotingComponent'
 class App extends Component {
   constructor(props) {
     super(props);
-    this.sortChanged = this.sortChanged.bind(this);
+    this.handleProductVote = this.handleProductVote.bind(this);
+    this.changeSort = this.changeSort.bind(this);
     this.state = {
       products: [],
       sort: 'asc'
     };
   }
 
-  sortChanged() {
-
+  componentDidMount() {
+    this.setState({
+      products: this.props.products
+    });
   }
+
+  //################################################################################################################################################################
+  //########## functions for ListComponent ########################################################################################################################
+  //##############################################################################################################################################################
+  handleProductVote(productID, type) {
+    console.log("Voted Product: " + productID);
+    let products = this.state.products;
+    products.find(product => {
+      if (product.id === productID) {
+        if (type === "up")
+          Object.assign({}, product, { votes: product.votes++ });
+        else
+          Object.assign({}, product, { votes: product.votes-- });
+      }
+    });
+
+    this.setState({
+      products
+    });
+  }
+
+  changeSort(type) {
+    this.setState({ sort: type })
+  }
+  //##############################################################################################################################################################
+  //########## end of functions for ListComponent #################################################################################################################
+  //################################################################################################################################################################
 
   render() {
     //CSS with emotion
@@ -31,7 +61,7 @@ class App extends Component {
       width: 35%;
     `
 
-    const Container = styled('div')`
+    const Container = styled('div') `
       margin: 30px;
     `
 
@@ -40,14 +70,19 @@ class App extends Component {
       'Last upvoted',
       'Last downvoted'
     ]
-    
+
     return (
       <Container>
         <LeftContainer>
-          <ListComponent products={products}/>
+          <ListComponent
+            sort={this.state.sort}
+            products={products}
+            changeSort={this.changeSort}
+            handleProductVote={this.handleProductVote}
+          />
         </LeftContainer>
         <RightContainer>
-          <VotingComponent titles={votingTitles}/>
+          <VotingComponent titles={votingTitles} />
         </RightContainer>
       </Container>
     );

@@ -4,45 +4,21 @@ import Item from './Item'
 class ListComponent extends Component {
     constructor(props) {
         super(props);
-        this.handleProductVote = this.handleProductVote.bind(this);
         this.changeSort = this.changeSort.bind(this);
-        this.state = {
-            products: [],
-            sort: 'asc'
-        };
-    }
+        this.handleProductVote = this.handleProductVote.bind(this);
+      }
 
     changeSort(type) {
-        this.setState({ sort: type })
-    }
-
-    componentDidMount() {
-        this.setState({
-            products: this.props.products
-        });
+        this.props.changeSort(type)
     }
 
     handleProductVote(productID, type) {
-        console.log("Voted Product: " + productID);
-        let products = this.state.products;
-        products.find(product => {
-            if (product.id === productID) {
-                if (type === "up")
-                    Object.assign({}, product, { votes: product.votes++ });
-                else
-                    Object.assign({}, product, { votes: product.votes-- });
-            }
-        });
-
-        this.setState({
-            products
-        });
+        this.props.handleProductVote(productID, type)
     }
 
-
     render() {
-        const sort = this.state.sort
-        const products = this.state.products.sort((a, b) => {
+        const sort = this.props.sort
+        const products = this.props.products.sort((a, b) => {
             return sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
         })
         let productComponents = products.map(product => (

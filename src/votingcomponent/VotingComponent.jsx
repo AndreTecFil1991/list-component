@@ -14,7 +14,7 @@ export default class VotingComponent extends Component {
         const titles = this.props.titles
 
         let votesContainers = titles.map(title => (
-            <VotesContainer title={title} />
+            <VotesContainer key={title} title={title} />
         ))
 
         return (
