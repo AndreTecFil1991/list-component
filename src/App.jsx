@@ -44,13 +44,12 @@ class App extends Component {
     super(props);
     this.handleProductVote = this.handleProductVote.bind(this);
     this.changeSort = this.changeSort.bind(this);
+    this.processVote = this.processVote.bind(this);
     this.state = {
       products: products,
       sort: 'asc',
-      lastVoted: {
-        upvoted: [],
-        downvoted: []
-      }
+      lastUpvoted: [],
+      lastDownvoted: []
     };
   }
 
@@ -58,35 +57,58 @@ class App extends Component {
     store.subscribe(() => this.forceUpdate());
   }
 
-
-
   //################################################################################################################################################################
   //########## functions for ListComponent ########################################################################################################################
   //##############################################################################################################################################################
+  processVote(votes, product) {
+    if (votes.length > 0) {
+      let updated = false;
+      votes.find(voted => {
+        if (voted.id === product.id) {
+          Object.assign({}, voted, { counter: voted.counter++ });
+          updated = true;
+        }
+      });
+
+      if (!updated)
+        votes.push({
+          id: product.id,
+          title: product.title,
+          counter: 1
+        });
+    }
+    else {
+      votes.push({
+        id: product.id,
+        title: product.title,
+        counter: 1
+      });
+    }
+
+    return votes;
+  }
+
   handleProductVote(productID, type) {
-    console.log("Voted Product: " + productID);
     let products = this.state.products;
-    let upvoted = this.state.lastVoted.upvoted;
-    let downvoted = this.state.lastVoted.downvoted;
+    let lastUpvoted = this.state.lastUpvoted;
+    let lastDownvoted = this.state.lastDownvoted;
     products.find(product => {
       if (product.id === productID) {
         if (type === "up") {
           Object.assign({}, product, { votes: product.votes++ });
-          upvoted.push(product.title);
+          lastUpvoted = this.processVote(lastUpvoted, product);
         }
         else {
           Object.assign({}, product, { votes: product.votes-- });
-          downvoted.push(product.title);
+          lastDownvoted = this.processVote(lastDownvoted, product);
         }
       }
     });
 
     this.setState({
       products,
-      lastVoted: {
-        upvoted,
-        downvoted
-      }
+      lastUpvoted,
+      lastDownvoted
     });
   }
 
@@ -95,16 +117,6 @@ class App extends Component {
   }
   //##############################################################################################################################################################
   //########## end of functions for ListComponent #################################################################################################################
-  //################################################################################################################################################################
-
-  //################################################################################################################################################################
-  //########## functions for VotingComponent ######################################################################################################################
-  //##############################################################################################################################################################
-
-
-
-  //##############################################################################################################################################################
-  //########## end of functions for VotingComponent ###############################################################################################################
   //################################################################################################################################################################
 
   render() {
@@ -128,10 +140,10 @@ class App extends Component {
     const votingComponentConfig = [
       {
         title: 'Last upvoted',
-        votes: this.state.lastVoted.upvoted
+        votes: this.state.lastUpvoted
       }, {
         title: 'Last downvoted',
-        votes: this.state.lastVoted.downvoted
+        votes: this.state.lastDownvoted
       }
     ]
 

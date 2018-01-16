@@ -41,7 +41,7 @@ const products = [
     },
     {
         id: 5,
-        title: 'Yellow Pail',
+        title: 'A New Beginning',
         description: 'On-demand sand castle construction expertise.',
         url: '#',
         votes: generateVoteCount(),
@@ -50,7 +50,7 @@ const products = [
     },
     {
         id: 6,
-        title: 'Supermajority: The Fantasy Congress League',
+        title: 'All ways to dispatch',
         description: 'Earn points when your favorite politicians pass legislation.',
         url: '#',
         votes: generateVoteCount(),
@@ -59,7 +59,7 @@ const products = [
     },
     {
         id: 7,
-        title: 'Tinfoild: Tailored tinfoil hats',
+        title: 'A song of Ice and Fire',
         description: 'We already have your measurements and shipping address.',
         url: '#',
         votes: generateVoteCount(),
@@ -68,7 +68,7 @@ const products = [
     },
     {
         id: 8,
-        title: 'Haught or Naught',
+        title: 'Star Wars - Last Chapter',
         description: 'High-minded or absent-minded? You decide.',
         url: '#',
         votes: generateVoteCount(),

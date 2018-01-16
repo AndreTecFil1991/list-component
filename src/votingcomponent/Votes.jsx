@@ -11,11 +11,23 @@ export default class Votes extends Component {
         const Vote = styled('div')`
             margin: 5px 5px;
             font-weight: bold;
+            width: 100%;
+            display: inline-flex;
+        `
+
+        const Title = styled('div')`
+            text-align: left;
+            width: 85%;
+        `
+
+        const Counter = styled('div')`
+            text-align: right;
         `
 
         const votes = this.props.votes.map((vote, index) => (
             <Vote key={index}>
-                {vote}
+                <Title>{vote.title}</Title>
+                <Counter>Votes: {vote.counter}</Counter>
             </Vote>
         ))
 
