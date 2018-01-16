@@ -14,7 +14,8 @@ class VotesContainer extends Component {
         const Box = styled('div') `
             border: solid 1px black;
             border-radius: 4px;
-            min-height: 200px;
+            height: 200px;
+            overflow-y: auto;
         `
 
         return (

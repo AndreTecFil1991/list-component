@@ -15,27 +15,27 @@ import VotingComponent from './votingcomponent/VotingComponent'
 }*/
 
 function reducer(state, action) {
-    if (action.type === 'ADD_MESSAGE') {
-        return {
-            votes: state.votes.concat(action.message)
-        }
-    } else if (action.type === 'DELETE_VOTE') {
-        return {
-            votes: [
-                ...state.votes.slice(0, action.index),
-                ...state.votes.slice(action.index + 1, state.votes.length)
-            ]
-        }
-    } else {
-        return state;
+  if (action.type === 'ADD_MESSAGE') {
+    return {
+      votes: state.votes.concat(action.message)
     }
+  } else if (action.type === 'DELETE_VOTE') {
+    return {
+      votes: [
+        ...state.votes.slice(0, action.index),
+        ...state.votes.slice(action.index + 1, state.votes.length)
+      ]
+    }
+  } else {
+    return state;
+  }
 }
 
 const initialState = { votes: [] };
 export const store = createStore(reducer, initialState);
 
 const listener = () => {
-    console.log('Current state: ', store.getState().votes);
+  console.log('Current state: ', store.getState().votes);
 }
 store.subscribe(listener);
 
@@ -48,17 +48,13 @@ class App extends Component {
       products: products,
       sort: 'asc',
       lastVoted: {
-        upvoted: ['Xpto1', 'Xpto2'],
-        downvoted: ['TEST']
+        upvoted: [],
+        downvoted: []
       }
     };
   }
 
   componentDidMount() {
-    /*this.setState({
-      products: products
-    });*/
-
     store.subscribe(() => this.forceUpdate());
   }
 
@@ -70,17 +66,27 @@ class App extends Component {
   handleProductVote(productID, type) {
     console.log("Voted Product: " + productID);
     let products = this.state.products;
+    let upvoted = this.state.lastVoted.upvoted;
+    let downvoted = this.state.lastVoted.downvoted;
     products.find(product => {
       if (product.id === productID) {
-        if (type === "up")
+        if (type === "up") {
           Object.assign({}, product, { votes: product.votes++ });
-        else
+          upvoted.push(product.title);
+        }
+        else {
           Object.assign({}, product, { votes: product.votes-- });
+          downvoted.push(product.title);
+        }
       }
     });
 
     this.setState({
-      products
+      products,
+      lastVoted: {
+        upvoted,
+        downvoted
+      }
     });
   }
 
@@ -96,7 +102,7 @@ class App extends Component {
   //##############################################################################################################################################################
 
 
-  
+
   //##############################################################################################################################################################
   //########## end of functions for VotingComponent ###############################################################################################################
   //################################################################################################################################################################
@@ -140,7 +146,7 @@ class App extends Component {
           />
         </LeftContainer>
         <RightContainer>
-          <VotingComponent 
+          <VotingComponent
             config={votingComponentConfig}
           />
         </RightContainer>
