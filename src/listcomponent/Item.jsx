@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styled from 'react-emotion'
 
 class Item extends Component {
   constructor(props) {
@@ -11,19 +12,109 @@ class Item extends Component {
   }
 
   render(props) {
+    const Item = styled('div')`
+      display: flex;
+      margin: 1em 0em;
+      width: 100%;
+      min-height: 0px;
+      background: transparent;
+      font-size: 1em;
+      padding: 0em;
+      border: none;
+      border-radius: 0rem;
+      box-shadow: none;
+      transition: box-shadow 0.1s ease;
+
+      &:first-child {
+        margin-top: 0em;
+      }
+    `
+
+    const Image = styled('div')`
+      position: relative;
+      flex: 0 0 auto;
+      display: block;
+      float: none;
+      margin: 0.5em 1em;
+      padding: 0em;
+      max-height: '';
+      align-self: top;
+      >img{
+        display: block;
+        width: 125px;
+        height: auto;
+        border-radius: 0.125rem;
+        border: none;
+      }
+    `
+
+    const Header = styled('div')`
+      display: inline-block;
+      margin: -0.21425em 0em 0em;
+      font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.85);
+    `
+
+    const Description = styled('div')`
+      margin-top: 0.6em;
+      max-width: auto;
+      font-size: 1em;
+      line-height: 1.4285em;
+      color: rgba(0, 0, 0, 0.87);
+    `
+    const Extra = styled('div')`
+      display: block;
+      position: relative;
+      background: none;
+      margin: 0.5rem 0em 0em;
+      width: 100%;
+      padding: 0em 0em 0em;
+      top: 0em;
+      left: 0em;
+      color: rgba(0, 0, 0, 0.4);
+      box-shadow: none;
+      transition: color 0.1s ease;
+    `
+
+    const AvatarImg = styled('img')`
+      border-radius: 500rem;
+      margin-left: 5px;
+    `
+
+    const IconUp = styled('i')`
+      margin: 2px 10px -2px 10px;
+      border: solid #4183C4;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(-135deg);
+      -webkit-transform: rotate(-135deg);
+    `
+
+    const IconDown = styled('i')`
+      margin: 2px 10px 3px 10px;
+      border: solid #4183C4;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+    `
+
     return (
-      <div className="item">
-        <div className="image">
+      <Item>
+        <Image>
           <img alt='' src={this.props.productImageUrl} />
-        </div>
-        <div className="middle aligned content">
-          <div className="header">
+        </Image>
+        <div>
+          <Header>
             <a
               onClick={() => {
                 this.handleVote("up");
               }}
             >
-              <i className="large caret up icon" />
+              <IconUp />
             </a>
             {this.props.votes}
             <a
@@ -31,22 +122,22 @@ class Item extends Component {
                 this.handleVote("down");
               }}
             >
-              <i className="large caret down icon" />
+              <IconDown />
             </a>
-          </div>
-          <div className="description">
+          </Header>
+          <Description>
             <a>{this.props.title} </a>
             <p> {this.props.description} </p>
-          </div>
-          <div className="extra">
+          </Description>
+          <Extra>
             <span>Submitted by: </span>
-            <img alt=''
+            <AvatarImg alt=''
               className="ui avatar image"
               src={this.props.submitterAvatarUrl}
             />
-          </div>
+          </Extra>
         </div>
-      </div>
+      </Item>
     );
   }
 }

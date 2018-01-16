@@ -117,20 +117,35 @@ class App extends Component {
   render() {
     //CSS with emotion
     const LeftContainer = styled('div') `
-      float: left;
-      width: 60%;
       margin-right: 10px;
+      @media (min-width: 720px) {
+        float: left;
+        width: 60%;        
+      }
+      @media (max-width: 720px) {
+        width: 100%;
+      }
     `
 
     const RightContainer = styled('div') `
-      width: 30%;
       margin-left: 10px;
-      width: 30%;
+      @media (min-width: 720px) {
+        width: 30%;        
+      }
+      @media (max-width: 720px) {
+        display: none;
+      }
     `
 
     const Container = styled('div') `
       margin: 30px;
-      width: 100%;
+      @media (min-width: 720px) {
+        width: 100%;
+      }
+      @media (max-width: 720px) {
+        margin: 0 10%;
+        width: 80%;
+      }
     `
 
     //titles for VotingComponent continers

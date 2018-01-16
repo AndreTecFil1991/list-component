@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styled from 'react-emotion'
 import Item from './Item'
 
 class ListComponent extends Component {
@@ -6,7 +7,7 @@ class ListComponent extends Component {
         super(props);
         this.changeSort = this.changeSort.bind(this);
         this.handleProductVote = this.handleProductVote.bind(this);
-      }
+    }
 
     changeSort(type) {
         this.props.changeSort(type)
@@ -17,6 +18,26 @@ class ListComponent extends Component {
     }
 
     render() {
+        const IconUp = styled('i') `
+            margin: 2px 10px -2px 10px;
+            border: solid #4183C4;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+        `
+
+        const IconDown = styled('i') `
+            margin: 2px 10px 3px 10px;
+            border: solid #4183C4;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        `
+
         const sort = this.props.sort
         const products = this.props.products.sort((a, b) => {
             return sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
@@ -34,13 +55,13 @@ class ListComponent extends Component {
                 onVote={this.handleProductVote}
             />
         ))
-        return (
+        return (            
             <div>
                 <a onClick={() => { this.changeSort('asc'); }}>
-                    <i className="large caret up icon" /> Sort Asc
+                    <IconUp /> Sort Asc
                 </a>
                 <a onClick={() => { this.changeSort('desc'); }}>
-                    <i className="large caret down icon" /> Sort Desc
+                    <IconDown /> Sort Desc
                 </a>
                 <div className="ui unstackable items">{productComponents}</div>
             </div>
