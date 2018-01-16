@@ -6,10 +6,10 @@ import VotesContainer from './VotesContainer'
 export default class VotingComponent extends Component {
     render() {
         const Container = styled('div') `
-            width: 35%;
             position: fixed;
             top: 100px;
             right: 30px;
+            width: 30%;
         `
         const configs = this.props.config
 

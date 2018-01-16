@@ -11,8 +11,6 @@ export default class Votes extends Component {
         const Vote = styled('div')`
             margin: 5px 5px;
             font-weight: bold;
-            width: 100%;
-            display: inline-flex;
         `
 
         const Title = styled('div')`

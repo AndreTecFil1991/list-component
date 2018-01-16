@@ -61,23 +61,18 @@ class App extends Component {
   //########## functions for ListComponent ########################################################################################################################
   //##############################################################################################################################################################
   processVote(votes, product) {
+    let updated = false;
+
     if (votes.length > 0) {
-      let updated = false;
       votes.find(voted => {
         if (voted.id === product.id) {
           Object.assign({}, voted, { counter: voted.counter++ });
           updated = true;
         }
       });
-
-      if (!updated)
-        votes.push({
-          id: product.id,
-          title: product.title,
-          counter: 1
-        });
     }
-    else {
+
+    if (!updated || votes.length === 0) {
       votes.push({
         id: product.id,
         title: product.title,
@@ -124,16 +119,18 @@ class App extends Component {
     const LeftContainer = styled('div') `
       float: left;
       width: 60%;
+      margin-right: 10px;
     `
 
     const RightContainer = styled('div') `
+      width: 30%;
+      margin-left: 10px;
       width: 30%;
     `
 
     const Container = styled('div') `
       margin: 30px;
       width: 100%;
-      display: flex;
     `
 
     //titles for VotingComponent continers
