@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'react-emotion'
 import { createStore } from 'redux'
-import './semantic-dist/semantic.css'
+//import './semantic-dist/semantic.css'
 
 import products from './js/MockData.js'
 import ListComponent from './listcomponent/ListComponent'
@@ -148,6 +148,14 @@ class App extends Component {
       }
     `
 
+    const H1 = styled('h1') `
+      text-align: center;
+      padding-bottom: 0.21428571rem;
+      top: 0;
+      border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+      padding-top: 20px;
+    `
+
     //titles for VotingComponent continers
     const votingComponentConfig = [
       {
@@ -160,21 +168,24 @@ class App extends Component {
     ]
 
     return (
-      <Container>
-        <LeftContainer>
-          <ListComponent
-            sort={this.state.sort}
-            products={products}
-            changeSort={this.changeSort}
-            handleProductVote={this.handleProductVote}
-          />
-        </LeftContainer>
-        <RightContainer>
-          <VotingComponent
-            config={votingComponentConfig}
-          />
-        </RightContainer>
-      </Container>
+      <div>
+        <H1>Items list</H1>
+        <Container>
+          <LeftContainer>
+            <ListComponent
+              sort={this.state.sort}
+              products={products}
+              changeSort={this.changeSort}
+              handleProductVote={this.handleProductVote}
+            />
+          </LeftContainer>
+          <RightContainer>
+            <VotingComponent
+              config={votingComponentConfig}
+            />
+          </RightContainer>
+        </Container>
+      </div>
     );
   }
 }

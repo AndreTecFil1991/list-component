@@ -80,6 +80,13 @@ class Item extends Component {
     const AvatarImg = styled('img')`
       border-radius: 500rem;
       margin-left: 5px;
+      width: 2em;
+      height: 2em;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 100%;
+      background-color: transparent;
     `
 
     const IconUp = styled('i')`
@@ -102,6 +109,20 @@ class Item extends Component {
       -webkit-transform: rotate(45deg);
     `
 
+    const A = styled('a')`
+      color: #4183C4;
+      text-decoration: none;
+      background: transparent;
+    `
+
+    const P = styled('p')`
+      margin: 0em 0em 1em;
+      line-height: 1.4285em;
+      &:last-child{
+        margin-bottom: 0em;
+      }
+    `
+
     return (
       <Item>
         <Image>
@@ -109,30 +130,29 @@ class Item extends Component {
         </Image>
         <div>
           <Header>
-            <a
+            <A
               onClick={() => {
                 this.handleVote("up");
               }}
             >
               <IconUp />
-            </a>
+            </A>
             {this.props.votes}
-            <a
+            <A
               onClick={() => {
                 this.handleVote("down");
               }}
             >
               <IconDown />
-            </a>
+            </A>
           </Header>
           <Description>
-            <a>{this.props.title} </a>
-            <p> {this.props.description} </p>
+            <A>{this.props.title} </A>
+            <P> {this.props.description} </P>
           </Description>
           <Extra>
             <span>Submitted by: </span>
             <AvatarImg alt=''
-              className="ui avatar image"
               src={this.props.submitterAvatarUrl}
             />
           </Extra>

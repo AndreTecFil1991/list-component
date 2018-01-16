@@ -38,6 +38,19 @@ class ListComponent extends Component {
             -webkit-transform: rotate(45deg);
         `
 
+        const Container = styled('div')`
+            margin: 1.5em 0em;
+            &:last-child {
+                margin-bottom: 0em !important;
+            }
+        `
+
+        const A = styled('a')`
+            color: #4183C4;
+            text-decoration: none;
+            background: transparent;
+        `
+
         const sort = this.props.sort
         const products = this.props.products.sort((a, b) => {
             return sort === 'desc' ? (b.votes - a.votes) : (a.votes - b.votes)
@@ -57,13 +70,13 @@ class ListComponent extends Component {
         ))
         return (            
             <div>
-                <a onClick={() => { this.changeSort('asc'); }}>
+                <A onClick={() => { this.changeSort('asc'); }}>
                     <IconUp /> Sort Asc
-                </a>
-                <a onClick={() => { this.changeSort('desc'); }}>
+                </A>
+                <A onClick={() => { this.changeSort('desc'); }}>
                     <IconDown /> Sort Desc
-                </a>
-                <div className="ui unstackable items">{productComponents}</div>
+                </A>
+                <Container>{productComponents}</Container>
             </div>
         )
     }
