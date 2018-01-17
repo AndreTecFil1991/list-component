@@ -6,6 +6,7 @@ import { createStore } from 'redux'
 import products from './js/MockData.js'
 import ListComponent from './listcomponent/ListComponent'
 import VotingComponent from './votingcomponent/VotingComponent'
+import SearchComponent from './searchcomponent/SearchComponent'
 
 /*handleSubmit = () => {
   store.dispatch({
@@ -45,17 +46,120 @@ class App extends Component {
     this.handleProductVote = this.handleProductVote.bind(this);
     this.changeSort = this.changeSort.bind(this);
     this.processVote = this.processVote.bind(this);
+    this.fillSearchStateInfo = this.fillSearchStateInfo.bind(this);
+    this.parseUsername = this.parseUsername.bind(this);
+    this.processSubmittedBy = this.processSubmittedBy.bind(this);
+    this.resetSearch = this.resetSearch.bind(this);
+    this.doSearch = this.doSearch.bind(this);
     this.state = {
       products: products,
+      productsBackup: products,
       sort: 'asc',
       lastUpvoted: [],
-      lastDownvoted: []
+      lastDownvoted: [],
+      search: {
+        votesFrom: 0,
+        votesTo: 0,
+        title: '',
+        submittedBy: '',
+        submittedByToShow: []
+      }
     };
   }
 
   componentDidMount() {
     store.subscribe(() => this.forceUpdate());
+    this.fillSearchStateInfo();
   }
+
+  //################################################################################################################################################################
+  //########## functions for SearchComponent ######################################################################################################################
+  //##############################################################################################################################################################
+  parseUsername(user) {
+    let username = '';
+    //split to have the image name
+    const firstSplit = user.split('/');
+    //split to have only the username
+    const secondSplit = firstSplit[firstSplit.length - 1].split('.');
+
+    if (secondSplit.length > 0) {
+      let usernameAux = secondSplit[0];
+      username = usernameAux[0].toUpperCase();
+
+      for (let i = 1; i < usernameAux.length; i++)
+        username += usernameAux[i];
+    }
+
+    return username;
+  }
+
+  processSubmittedBy(submittedByToShow, user) {
+    let updated = false;
+
+    if (submittedByToShow.length > 0) {
+      submittedByToShow.find(submittedBy => {
+        if (submittedBy.userimage === user) {
+          updated = true;
+        }
+      });
+    }
+
+    if (!updated || submittedByToShow.length === 0) {
+      submittedByToShow.push({
+        username: this.parseUsername(user),
+        userimage: user
+      });
+    }
+
+    return submittedByToShow;
+  }
+
+  fillSearchStateInfo() {
+    const products = this.state.products.sort((a, b) => {
+      return a.votes - b.votes
+    })
+
+    const votesFrom = products[0].votes;
+    const votesTo = products[products.length - 1].votes;
+
+    let submittedByToShow = [];
+
+    const scope = this;
+
+    for(let i = 0; i<products.length; i++) {
+      submittedByToShow = scope.processSubmittedBy(submittedByToShow, products[i].submitterAvatarUrl);
+    }
+    
+    this.setState({
+      search: {
+        votesFrom,
+        votesTo,
+        submittedByToShow
+      }
+    })
+  }
+
+  filterResults() {
+
+  }
+
+  doSearch(fromVotes, toVotes, title, submittedBy) {
+    this.setState({
+      fromVotes,
+      toVotes,
+      title,
+      submittedBy
+    });
+  }
+
+  resetSearch() {
+    this.setState({
+      products: this.state.productsBackup
+    })
+  }
+  //##############################################################################################################################################################
+  //########## end of functions for SearchComponent ###############################################################################################################
+  //################################################################################################################################################################
 
   //################################################################################################################################################################
   //########## functions for ListComponent ########################################################################################################################
@@ -172,6 +276,12 @@ class App extends Component {
         <H1>Items list</H1>
         <Container>
           <LeftContainer>
+            <SearchComponent
+              votesFrom={this.state.search.votesFrom}
+              votesTo={this.state.search.votesTo}
+              submittedByToShow={this.state.search.submittedByToShow}
+              resetSearch={this.resetSearch}
+            />
             <ListComponent
               sort={this.state.sort}
               products={products}
