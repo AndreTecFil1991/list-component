@@ -122,12 +122,16 @@ class App extends Component {
     const votesFrom = products[0].votes;
     const votesTo = products[products.length - 1].votes;
 
-    let submittedByToShow = [];
-
-    const scope = this;
+    //1st object empty to allow searches without selection
+    let submittedByToShow = [
+      {
+        username: '-- select an option --',
+        userimage: ''
+      }
+    ];
 
     for(let i = 0; i<products.length; i++) {
-      submittedByToShow = scope.processSubmittedBy(submittedByToShow, products[i].submitterAvatarUrl);
+      submittedByToShow = this.processSubmittedBy(submittedByToShow, products[i].submitterAvatarUrl);
     }
     
     this.setState({
@@ -143,13 +147,8 @@ class App extends Component {
 
   }
 
-  doSearch(fromVotes, toVotes, title, submittedBy) {
-    this.setState({
-      fromVotes,
-      toVotes,
-      title,
-      submittedBy
-    });
+  doSearch(search) {
+    
   }
 
   resetSearch() {
@@ -281,6 +280,7 @@ class App extends Component {
               votesTo={this.state.search.votesTo}
               submittedByToShow={this.state.search.submittedByToShow}
               resetSearch={this.resetSearch}
+              doSearch={this.doSearch}
             />
             <ListComponent
               sort={this.state.sort}

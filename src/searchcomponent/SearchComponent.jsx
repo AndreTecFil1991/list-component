@@ -6,10 +6,42 @@ class SearchComponent extends Component {
         super(props);
         this.onChange = this.onChange.bind(this);
         this.resetSearch = this.resetSearch.bind(this);
+        this.doSearch = this.doSearch.bind(this);
+        this.localProps = {
+            votesFrom: this.props.votesFrom,
+            votesTo: this.props.votesTo,
+            title: '',
+            submittedBy: ''
+        }
     }
 
-    onChange() {
+    onChange(event) {
+        let origin = event.nativeEvent.target.id;
 
+        switch (origin) {
+            case 'submittedBy':
+                this.localProps.submittedBy = event.nativeEvent.target.selectedOptions[0].value;
+                break;
+
+            case 'votesFrom':
+                this.localProps.votesFrom = event.nativeEvent.target.value;
+                break;
+
+            case 'votesTo':
+                this.localProps.votesTo = event.nativeEvent.target.value;
+                break;
+
+            case 'title':
+                this.localProps.title = event.nativeEvent.target.value;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    doSearch() {
+        this.props.doSearch(this.localProps);
     }
 
     resetSearch() {
@@ -104,22 +136,22 @@ class SearchComponent extends Component {
                 <Votes>
                     <label>Votes: </label>
                     <div>
-                        <input type="number" value={this.props.votesFrom} onChange={this.onChange} /><span> to </span><input type="number" value={this.props.votesTo} onChange={this.onChange} />
+                        <input id="votesFrom" type="number" value={this.props.votesFrom} onChange={this.onChange} /><span> to </span><input id="votesTo" type="number" value={this.props.votesTo} onChange={this.onChange} />
                     </div>
                 </Votes>
                 <Title>
                     <label>Title: </label>
-                    <input type="text" />
+                    <input id="title" type="text" onChange={this.onChange} />
                 </Title>
                 <SubmittedBy>
                     <label>Submitted By: </label>
-                    <select>
+                    <select onChange={this.onChange} id="submittedBy">
                         {options}
                     </select>
                 </SubmittedBy>
                 <Buttons>
                     <input type="submit" value="Search" />
-                    <input type="reset" onClick={this.resetSearch}/>
+                    <input type="reset" onClick={this.resetSearch} />
                 </Buttons>
             </Container>
         )
