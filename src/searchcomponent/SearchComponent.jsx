@@ -94,6 +94,7 @@ class SearchComponent extends Component {
         const SubmittedBy = styled('div') `
             width: 25%;
             margin-right: 10px;
+            margin-left: 10px;
             >label {
                 width: 100%;
                 display: inline-block;
