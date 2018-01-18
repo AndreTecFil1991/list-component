@@ -150,7 +150,7 @@ class SearchComponent extends Component {
                     </select>
                 </SubmittedBy>
                 <Buttons>
-                    <input type="submit" value="Search" />
+                    <input type="submit" value="Search" onClick={this.doSearch}/>
                     <input type="reset" onClick={this.resetSearch} />
                 </Buttons>
             </Container>

@@ -43,6 +43,7 @@ store.subscribe(listener);
 class App extends Component {
   constructor(props) {
     super(props);
+    //functions scope bind
     this.handleProductVote = this.handleProductVote.bind(this);
     this.changeSort = this.changeSort.bind(this);
     this.processVote = this.processVote.bind(this);
@@ -51,6 +52,10 @@ class App extends Component {
     this.processSubmittedBy = this.processSubmittedBy.bind(this);
     this.resetSearch = this.resetSearch.bind(this);
     this.doSearch = this.doSearch.bind(this);
+    this.filterByVotes = this.filterByVotes.bind(this);
+    this.filterByTitle = this.filterByTitle.bind(this);
+    this.filterBySubmittedBy = this.filterBySubmittedBy.bind(this);
+    //state
     this.state = {
       products: products,
       productsBackup: products,
@@ -130,10 +135,10 @@ class App extends Component {
       }
     ];
 
-    for(let i = 0; i<products.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       submittedByToShow = this.processSubmittedBy(submittedByToShow, products[i].submitterAvatarUrl);
     }
-    
+
     this.setState({
       search: {
         votesFrom,
@@ -143,12 +148,72 @@ class App extends Component {
     })
   }
 
-  filterResults() {
+  filterByVotes(products, votesFrom, votesTo) {
+    let filteredProducts = [];
 
+    if (votesFrom.length === 0 && votesTo.length === 0)
+      return products;
+
+    products.find(product => {
+      if ((votesFrom.length === 0 && product.votes <= votesTo) || (product.votes >= votesFrom && votesTo.length === 0) || (product.votes >= votesFrom && product.votes <= votesTo))
+        filteredProducts.push(product);
+    });
+
+    return filteredProducts;
+  }
+
+  filterByTitle(products, title) {
+    let filteredProducts = [];
+
+    if(title.length === 0)
+      return products;
+
+    products.find(product => {
+      if(product.title.toUpperCase().indexOf(title.toUpperCase()) > -1)
+        filteredProducts.push(product);
+    });
+
+    return filteredProducts;
+  }
+
+  filterBySubmittedBy(products, submittedBy) {
+    let filteredProducts = [];
+
+    products.find(product => {
+      if(product.submitterAvatarUrl.toUpperCase().indexOf(submittedBy.toUpperCase()) > -1)
+        filteredProducts.push(product);
+    })
+
+    return filteredProducts;
   }
 
   doSearch(search) {
-    
+    let products = this.state.productsBackup;
+    const votesFrom = search.votesFrom;
+    const votesTo = search.votesTo;
+    const title = search.title;
+    const submittedBy = search.submittedBy;
+
+    let filteredProducts = [];
+
+    if (search.votesFrom || search.votesTo) {
+      filteredProducts = this.filterByVotes(products, votesFrom, votesTo);
+      products = filteredProducts;
+    }
+
+    if (title.length > 0) {
+      filteredProducts = this.filterByTitle(products, title);
+      products = filteredProducts;
+    }
+
+    if (submittedBy.indexOf('--') === -1) {
+      filteredProducts = this.filterBySubmittedBy(products, submittedBy);
+    }
+
+    this.setState(
+      { products: filteredProducts }
+    )
+
   }
 
   resetSearch() {
@@ -284,7 +349,7 @@ class App extends Component {
             />
             <ListComponent
               sort={this.state.sort}
-              products={products}
+              products={this.state.products}
               changeSort={this.changeSort}
               handleProductVote={this.handleProductVote}
             />
